@@ -1,0 +1,2 @@
+#!/bin/bash
+tidb/bin/tidb-server --config "./tidb.toml" --store tikv --path 127.0.0.1:2379 --host 0.0.0.0 --advertise-address 0.0.0.0 --status=10081
