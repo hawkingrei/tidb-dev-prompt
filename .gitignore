@@ -1,2 +1,5 @@
 gitbisect/tidb-slow.log
 gitbisect/oom_record
+gitbisect/replayer/replayer.zip
+gitbisect/t/test.test
+gitbisect/r/test.result
