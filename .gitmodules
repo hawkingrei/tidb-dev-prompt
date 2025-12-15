@@ -1,0 +1,3 @@
+[submodule "gitbisect/tidb"]
+	path = gitbisect/tidb
+	url = https://github.com/pingcap/tidb
