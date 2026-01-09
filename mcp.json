@@ -1,0 +1,14 @@
+{
+  "langgraph-docs-mcp": {
+    "command": "uvx",
+    "args": [
+      "--from",
+      "mcpdoc",
+      "mcpdoc",
+      "--urls",
+      "TiDB:https://raw.githubusercontent.com/hawkingrei/tidb-dev-prompt/refs/heads/main/llms.txt",
+      "--transport",
+      "stdio"
+    ]
+  }
+}
