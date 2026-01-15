@@ -1,11 +1,11 @@
 ---
 name: tidb-doc-finder
-description: TiDB-specific documentation lookup guided by this repo's llms.txt hub: read llms.txt, pick the best linked source (tidb-dev-guide llms-full.txt, TiDB user guide llms.txt, or Uber Go style guide), fetch it, then search within it to answer with precise references. Use when asked to “找文档/查资料/依据文档回答” about TiDB development or usage.
+description: "TiDB-specific documentation lookup guided by this repo's llms.txt hub: read llms.txt, pick the best linked source (tidb-dev-guide llms-full.txt, TiDB user guide llms.txt, or Uber Go style guide), fetch it, then search within it to answer with precise references. Use when asked to find docs, research, or provide doc-grounded answers about TiDB development or usage."
 ---
 
 # tidb-doc-finder
 
-Use `llms.txt` in the current repo as the single source of truth for “where to look”.
+Use `llms.txt` in the current repo as the single source of truth for "where to look".
 
 ## Workflow
 
@@ -14,9 +14,9 @@ Use `llms.txt` in the current repo as the single source of truth for “where to
    - Do not hardcode URLs elsewhere; `llms.txt` is authoritative.
 
 2. **Select the best source**
-   - **TiDB dev / contribution / architecture** → TiDB Developer Guide (`llms-full.txt`)
-   - **TiDB SQL behavior / user-facing features / releases** → TiDB User Guide (`llms.txt`)
-   - **Go style / idioms** → Uber Go Style Guide (`style.md`)
+   - **TiDB dev / contribution / architecture** -> TiDB Developer Guide (`llms-full.txt`)
+   - **TiDB SQL behavior / user-facing features / releases** -> TiDB User Guide (`llms.txt`)
+   - **Go style / idioms** -> Uber Go Style Guide (`style.md`)
 
 3. **Fetch to a local cache file (recommended)**
    - Use `tidb-doc-finder/scripts/fetch.sh` to download and cache the selected source.

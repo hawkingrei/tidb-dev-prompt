@@ -18,7 +18,7 @@
   - runtime-level masking/forcing (best), or
   - an `Allowed actions` block appended near the end (fallback).
 - Use consistent tool-name prefixes to enable group gating.
-- When tools are “disabled”, still allow reading existing outputs that reference them.
+- When tools are "disabled", still allow reading existing outputs that reference them.
 
 ## Filesystem as context
 
@@ -32,12 +32,12 @@
 ## Attention control via recitation
 
 - Maintain `context/todo.md`; rewrite it frequently.
-- Put “Goal / Next action” near the end of the context before decision time.
+- Put "Goal / Next action" near the end of the context before decision time.
 
 ## Error preservation
 
 - Keep the failure trace (or pointer to it).
-- Add a short note: “cause hypothesis + changed plan”.
+- Add a short note: "cause hypothesis + changed plan".
 - Do not hide failures by resetting state unless the reset itself is part of the context.
 
 ## Avoid few-shot lock-in
