@@ -13,22 +13,27 @@ Use `llms.txt` in the current repo as the single source of truth for "where to l
    - Open `llms.txt` and extract the doc endpoints (URLs).
    - Do not hardcode URLs elsewhere; `llms.txt` is authoritative.
 
-2. **Select the best source**
+2. **If MCP `tidb-doc-ext` is available, prefer it**
+   - Use the MCP to fetch documentation content.
+   - Only request markdown sources; do not fetch HTML or URLs without a file extension.
+   - If MCP is available, use it instead of the local fetch/cache scripts; otherwise fall back to the scripts below.
+
+3. **Select the best source**
    - **TiDB dev / contribution / architecture** -> TiDB Developer Guide (`llms-full.txt`)
    - **TiDB SQL behavior / user-facing features / releases** -> TiDB User Guide (`llms.txt`)
    - **Go style / idioms** -> Uber Go Style Guide (`style.md`)
 
-3. **Fetch to a local cache file (recommended)**
+4. **Fetch to a local cache file (recommended)**
    - Use `tidb-doc-finder/scripts/fetch.sh` to download and cache the selected source.
    - Keep the cache so subsequent searches are fast and can be done offline.
 
-4. **Search within the fetched file**
+5. **Search within the fetched file**
    - Use `tidb-doc-finder/scripts/search.sh <cached_file> <query>` to:
      - find the most relevant sections,
      - show a small excerpt,
      - and capture headings/anchors if present.
 
-5. **Answer with doc-grounded output**
+6. **Answer with doc-grounded output**
    - Provide a direct answer.
    - Include the source URL from `llms.txt` and the matched heading/section name.
    - If the doc does not contain the answer, say so and propose the next-best source (still chosen from `llms.txt`).
