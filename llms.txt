@@ -12,3 +12,4 @@ This document serves as a central point of reference for accessing various TiDB 
 ## User Manuals
 
 - [TiDB User Guide (Latest Release)](https://docs.pingcap.com/llms.txt): Official user manual for the latest TiDB release, including detailed documentation and release notes for all versions.
+- [TiUP Documentation Map](https://docs.pingcap.com/tidb/stable/tiup-documentation-guide.md): Guide you through TiUP documentation with links and introductions.
