@@ -33,11 +33,12 @@
 
 - Maintain `context/todo.md`; rewrite it frequently.
 - Put "Goal / Next action" near the end of the context before decision time.
+- If blocked, add a one-line "Blocked by" note in `context/todo.md`.
 
 ## Error preservation
 
 - Keep the failure trace (or pointer to it).
-- Add a short note: "cause hypothesis + changed plan".
+- Use the 3-line template in `context/errors.md` (FAILED / WHY / NEXT).
 - Do not hide failures by resetting state unless the reset itself is part of the context.
 
 ## Avoid few-shot lock-in
@@ -47,4 +48,3 @@
   - ordering of sections,
   - minor formatting changes,
   - while keeping the prefix stable.
-
