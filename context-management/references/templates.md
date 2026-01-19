@@ -10,6 +10,7 @@ Create a small, predictable structure:
   - `todo.md` (goals + checklist; rewritten)
   - `state.md` (current state; rewritten)
   - `decisions.md` (append-only decisions + rationale)
+  - `errors.md` (append-only failures + retry notes)
   - `log.md` (append-only: actions/observations pointers)
 - `artifacts/` (large tool outputs; append-only files)
 
@@ -31,6 +32,14 @@ Create a small, predictable structure:
 <exactly one concrete action>
 ```
 
+## `context/errors.md`
+
+```md
+FAILED: <what failed>
+WHY: <best guess>
+NEXT: <next attempt>
+```
+
 ## `context/state.md`
 
 ```md
@@ -45,6 +54,13 @@ Create a small, predictable structure:
 
 # Pointers
 - <file path or URL>: <why it matters>
+```
+
+## Offload example (large output)
+
+```text
+Summary: tool output too large; wrote full log to artifacts/scan.log
+Pointer: artifacts/scan.log
 ```
 
 ## Prompt assembly (decision step)
@@ -78,4 +94,3 @@ Keep everything above `=== DYNAMIC ===` as stable as possible across turns.
 [Next action]
 <one concrete action>
 ```
-

@@ -1,6 +1,6 @@
 ---
 name: context-management
-description: "Use for any TiDB-related projects or tasks. Context engineering and context management for AI agents: keep prompt prefixes stable for KV-cache, use append-only context, prefer tool masking over tool removal, offload large observations into filesystem memory, recite goals/todos to control attention, preserve errors for recovery, and avoid few-shot pattern lock-in. Use when building or debugging agent loops, prompt/context schemas, memory strategies, or tool-availability policies."
+description: "Use for any TiDB-related projects, tasks, or code. Context engineering and context management for AI agents: keep prompt prefixes stable for KV-cache, use append-only context, prefer tool masking over tool removal, offload large observations into filesystem memory, recite goals/todos to control attention, preserve errors for recovery, and avoid few-shot pattern lock-in. Use when building or debugging agent loops, prompt/context schemas, memory strategies, or tool-availability policies."
 ---
 
 # Context Management Skill
@@ -49,4 +49,6 @@ Design and operate agent context so it is fast, cheap, stable, and robust over l
 ## References
 
 - Templates: `context-management/references/templates.md`
+- Context contract: `context-management/references/context_contract.md`
+- Errors template: `context-management/references/errors.md`
 - Checklists: `context-management/references/checklists.md`
