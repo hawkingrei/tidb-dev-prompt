@@ -6,8 +6,17 @@ description: "Use for any TiDB-related projects, tasks, or code. Context enginee
 # Context Management Skill
 
 Design and operate agent context so it is fast, cheap, stable, and robust over long tool-using loops.
+Use a two-layer model:
+1) **Global context** (stable, cross-project, rarely edited; e.g. `~/.codex/`)
+2) **Local context** (project-specific, frequently updated; lives in repo)
 
 ## Workflow
+
+0. **Separate global vs local context**
+   - Global: invariant rules, assembly templates, stable checklists.
+   - Local: project goals, current state, logs, errors, and per-run artifacts.
+   - Prefer **read-only** access to global context during runs; update it only by explicit request.
+   - Ensure project `.gitignore` includes `.cache/` (keep `.cache/.gitkeep` if you want the directory tracked).
 
 1. **Define the invariant prefix**
    - Keep system/developer prompt prefixes stable across turns and sessions.
@@ -27,6 +36,7 @@ Design and operate agent context so it is fast, cheap, stable, and robust over l
    - Store large observations (pages, logs, diffs, stack traces, CSVs) in files, not in the prompt.
    - Keep context compression reversible: retain pointers (file paths, URLs, IDs) so content can be reloaded on demand.
    - Put only a short summary + pointer in the model context.
+   - Prefer per-run directories to avoid file contention (e.g. `.cache/context/run/YYYYMMDD-HHMM/`).
 
 5. **Recite goals to control attention**
    - Maintain a `todo.md` (or equivalent) and rewrite it as the task progresses.
@@ -39,6 +49,11 @@ Design and operate agent context so it is fast, cheap, stable, and robust over l
 7. **Avoid few-shot pattern lock-in**
    - Do not let the context become a long chain of near-identical action/observation pairs.
    - Introduce controlled variation in formatting/wording/order in the *late* (non-cached) part of context to break brittle imitation, while keeping the prefix stable.
+
+8. **Concurrency safety**
+   - Use a single-writer rule for local context files.
+   - Use a lock file (e.g. `.cache/context/.lock`) when writing shared local files.
+   - Prefer append-only logs and run-scoped subdirectories to avoid merge conflicts.
 
 ## Deliverables
 

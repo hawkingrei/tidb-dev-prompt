@@ -4,17 +4,29 @@ Use these templates to keep a stable prefix while pushing dynamic state to the e
 
 ## Filesystem memory layout
 
+Use a two-layer layout: global (stable) + local (project).
+
+### Global (stable, cross-project)
+
+- `~/.codex/`
+  - `context_contract.md` (stable rules + constraints)
+  - `prompt_template.md` (stable assembly template)
+  - `context_checklist.md` (pre/post checks)
+
+### Local (project-specific)
+
 Create a small, predictable structure:
 
-- `context/`
+- `.cache/context/`
   - `todo.md` (goals + checklist; rewritten)
   - `state.md` (current state; rewritten)
   - `decisions.md` (append-only decisions + rationale)
   - `errors.md` (append-only failures + retry notes)
   - `log.md` (append-only: actions/observations pointers)
-- `artifacts/` (large tool outputs; append-only files)
+  - `.lock` (optional lock file for single-writer)
+- `.cache/context/run/YYYYMMDD-HHMM/` (per-run artifacts, append-only)
 
-## `context/todo.md`
+## `.cache/context/todo.md`
 
 ```md
 # Goal
@@ -32,7 +44,7 @@ Create a small, predictable structure:
 <exactly one concrete action>
 ```
 
-## `context/errors.md`
+## `.cache/context/errors.md`
 
 ```md
 FAILED: <what failed>
@@ -40,7 +52,7 @@ WHY: <best guess>
 NEXT: <next attempt>
 ```
 
-## `context/state.md`
+## `.cache/context/state.md`
 
 ```md
 # Current status
@@ -59,8 +71,8 @@ NEXT: <next attempt>
 ## Offload example (large output)
 
 ```text
-Summary: tool output too large; wrote full log to artifacts/scan.log
-Pointer: artifacts/scan.log
+Summary: tool output too large; wrote full log to .cache/context/run/20250123-1030/scan.log
+Pointer: .cache/context/run/20250123-1030/scan.log
 ```
 
 ## Prompt assembly (decision step)
