@@ -19,18 +19,18 @@ Keep the prompt prefix stable, push dynamic state to the tail, and offload bulky
 - Error notes (if any)
 
 ## Filesystem Memory Layout
-- `context/`
+- `.cache/context/`
   - `todo.md` (goal + next action; rewritten each step)
   - `state.md` (current status; rewritten)
   - `errors.md` (append-only failures + retry notes)
   - `log.md` (append-only action/observation pointers)
-- `artifacts/` (large tool outputs; append-only)
+- `.cache/context/run/` (large tool outputs; append-only)
 
 ## When to Offload to Files
-- If a tool output exceeds: `<N lines>` or `<K KB>`, write to `artifacts/` and keep only a 1-2 line summary + file path in context.
+- If a tool output exceeds: `<N lines>` or `<K KB>`, write to `.cache/context/run/` and keep only a 1-2 line summary + file path in context.
 
 ## Error Handling
-- On failure, append to `context/errors.md`:
+- On failure, append to `.cache/context/errors.md`:
   - What failed
   - Why (best guess)
   - Next attempt plan
@@ -39,6 +39,6 @@ Keep the prompt prefix stable, push dynamic state to the tail, and offload bulky
 - Every 3-5 steps, vary the order or wording of the dynamic tail (keep the stable prefix unchanged).
 
 ## Step Ritual
-1) Update `context/todo.md` with 1 line Goal + 1 line Next action.
-2) If needed, update `context/state.md`.
+1) Update `.cache/context/todo.md` with 1 line Goal + 1 line Next action.
+2) If needed, update `.cache/context/state.md`.
 3) Append new artifacts and log pointers.

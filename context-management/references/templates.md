@@ -92,13 +92,13 @@ Keep everything above `=== DYNAMIC ===` as stable as possible across turns.
 - deny: <tool group or tool names>
 
 [State]
-<paste from context/state.md (short)>
+<paste from .cache/context/state.md (short)>
 
 [Todo]
-<paste from context/todo.md (short)>
+<paste from .cache/context/todo.md (short)>
 
 [Evidence pointers]
-- artifacts/<file>: <1-line summary>
+- .cache/context/run/<ts>/<file>: <1-line summary>
 
 [Errors to remember]
 - <pointer to error log>: <what failed and what changed>

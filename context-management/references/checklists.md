@@ -22,7 +22,7 @@
 
 ## Filesystem as context
 
-- Write large outputs to `artifacts/` and reference them by path.
+- Write large outputs to `.cache/context/run/` and reference them by path.
 - Store only:
   - a short summary,
   - the pointer (path/URL),
@@ -31,14 +31,14 @@
 
 ## Attention control via recitation
 
-- Maintain `context/todo.md`; rewrite it frequently.
+- Maintain `.cache/context/todo.md`; rewrite it frequently.
 - Put "Goal / Next action" near the end of the context before decision time.
-- If blocked, add a one-line "Blocked by" note in `context/todo.md`.
+- If blocked, add a one-line "Blocked by" note in `.cache/context/todo.md`.
 
 ## Error preservation
 
 - Keep the failure trace (or pointer to it).
-- Use the 3-line template in `context/errors.md` (FAILED / WHY / NEXT).
+- Use the 3-line template in `.cache/context/errors.md` (FAILED / WHY / NEXT).
 - Do not hide failures by resetting state unless the reset itself is part of the context.
 
 ## Avoid few-shot lock-in
