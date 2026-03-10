@@ -36,6 +36,7 @@ Use this skill when the task is any optimizer/planner correctness bug, including
 
 - A concrete bug case (issue link, failing SQL, or failing test).
 - Target branch and module scope.
+- Original PR link/number when the task is PR-driven and you need the related-issue bot sweep.
 
 If either is missing, ask once, then proceed with explicit assumptions.
 
@@ -73,11 +74,24 @@ loop {
 }
 ```
 
-5. Validation and closure
+5. Related-issue sweep for PR-driven fixes
+   - If there is an original PR, run:
+
+```bash
+curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
+```
+
+   - Replace `<issue_id>` with the actual issue id for the bug being fixed.
+   - After the request completes, inspect the bot reply on the original PR and collect the related issues it points out.
+   - Before closing the task, check whether the current fix also resolves any of those related issues.
+   - If a related issue is also fixed, add regression coverage or explicit validation for that SQL shape when practical.
+   - If a related issue is not covered, call it out as remaining follow-up work instead of silently assuming it is fixed.
+
+6. Validation and closure
    - Confirm old behavior is rejected and new behavior is accepted.
    - Keep validation scope minimal but sufficient to prove no regression in nearby semantics.
 
-6. Write reusable notes
+7. Write reusable notes
    - Record debugging pitfalls and verified behavior in `docs/note`.
    - Prefer appending an existing note file over creating a new top-level note file.
 
@@ -103,6 +117,9 @@ go test -run <TestName> -tags=intest,deadlock ./pkg/planner/...
 # If package uses failpoints, decide via search first
 rg -n "failpoint\\.Inject|failpoint\\.Enable" pkg/planner/<subpkg>
 
+# Trigger the PR bot to surface related issues, then inspect the original PR reply
+curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
+
 # MUST run bazel prepare after adding new tests (also run it for other repository-required cases)
 make bazel_prepare
 ```
@@ -114,5 +131,6 @@ When finishing, report:
 1. Files changed and why each change is necessary.
 2. Risk check: correctness, compatibility, performance.
 3. Exact verification commands used.
-4. Note path added/updated under `docs/note` (or why note update was skipped).
-5. What was not verified locally.
+4. Whether the original PR bot surfaced related issues, and which ones were also fixed or left for follow-up.
+5. Note path added/updated under `docs/note` (or why note update was skipped).
+6. What was not verified locally.
