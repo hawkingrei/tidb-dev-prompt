@@ -81,7 +81,7 @@ loop {
 curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
 ```
 
-   - Replace `<issue_id>` with the actual issue id for the bug being fixed.
+   - Replace `<issue_id>` with the ID of the issue being fixed (which is typically linked in the original PR).
    - After the request completes, inspect the bot reply on the original PR and collect the related issues it points out.
    - Before closing the task, check whether the current fix also resolves any of those related issues.
    - If a related issue is also fixed, add regression coverage or explicit validation for that SQL shape when practical.
