@@ -158,3 +158,11 @@ When finishing, report:
 4. Whether the original PR bot surfaced related issues, and which ones were also fixed or left for follow-up.
 5. Note path added/updated under `~/devel/opensource/tidb-note` (or why note update was skipped).
 6. What was not verified locally.
+
+## Additional PR / Push Guardrails
+
+- If the task includes publishing the fix or opening a PR, push the working branch to `hawkingrei/tidb` only.
+- Never `git push` the working branch to `pingcap/tidb`.
+- Never open a PR whose source branch lives on `pingcap/tidb`.
+- If a PR is requested, open it from `hawkingrei/tidb:<branch>` into `pingcap/tidb:<target-branch>`.
+- When opening the PR, mention the issue link, root cause summary, minimal-fix reasoning, and exact validation commands.
