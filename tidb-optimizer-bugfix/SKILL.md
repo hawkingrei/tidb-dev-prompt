@@ -158,3 +158,8 @@ When finishing, report:
 4. Whether the original PR bot surfaced related issues, and which ones were also fixed or left for follow-up.
 5. Note path added/updated under `~/devel/opensource/tidb-note` (or why note update was skipped).
 6. What was not verified locally.
+
+## Additional PR / Push Guardrails
+
+- Push working branches to your fork (`hawkingrei/tidb`) only. Never push directly to the upstream `pingcap/tidb` repository.
+- Open pull requests from your fork (`hawkingrei/tidb:<branch>`) to the upstream repository (`pingcap/tidb:<target-branch>`).
