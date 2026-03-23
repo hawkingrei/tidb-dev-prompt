@@ -161,8 +161,5 @@ When finishing, report:
 
 ## Additional PR / Push Guardrails
 
-- If the task includes publishing the fix or opening a PR, push the working branch to `hawkingrei/tidb` only.
-- Never `git push` the working branch to `pingcap/tidb`.
-- Never open a PR whose source branch lives on `pingcap/tidb`.
-- If a PR is requested, open it from `hawkingrei/tidb:<branch>` into `pingcap/tidb:<target-branch>`.
-- When opening the PR, mention the issue link, root cause summary, minimal-fix reasoning, and exact validation commands.
+- Push working branches to your fork (`hawkingrei/tidb`) only. Never push directly to the upstream `pingcap/tidb` repository.
+- Open pull requests from your fork (`hawkingrei/tidb:<branch>`) to the upstream repository (`pingcap/tidb:<target-branch>`).
