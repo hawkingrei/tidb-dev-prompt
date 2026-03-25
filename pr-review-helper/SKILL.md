@@ -44,6 +44,15 @@ If any are missing, ask the user once. Do not guess.
      - If logs are truncated or need full context:
        - `gh run download <run-id>` then inspect the downloaded logs.
 
+## TiDB-specific CI heuristics
+
+Apply these rules when the repository is `pingcap/tidb` or a TiDB fork:
+
+- If the diff does not touch parser-related files, treat parser test failures as likely flaky noise and do not block on them unless the logs show a direct causal link to the change.
+- Treat `fast_test_tiprow`, `idc-jenkins-ci-tidb/unit-test`, and `pull-build-next-gen` as equivalent unit-test surfaces. Summarize them as one signal instead of three independent blockers.
+- If any one of those equivalent jobs is the blocker and the failure looks flaky or infra-related, recommend replying `/retest` immediately instead of waiting for the other two to finish or fail.
+- While CI is pending or rerunning, do not keep the user blocked on the same PR. Suggest switching to another ready issue, review, or coding task and come back when fresh CI signal arrives.
+
 ## Fallback Workflow (gh CLI Only)
 
 Use this when MCP is unavailable or incomplete.
@@ -70,6 +79,7 @@ Provide a concise summary with:
 - Review comments grouped by file/line, including suggestion patches if present
 - Non-review discussion comments that may affect changes
 - CI status: pass/fail, failing jobs, and key error messages
+- For TiDB PRs, separate likely ignorable flaky failures from actionable failures
 - Clear action items for the PR author
 
 Do not post new comments, re-run CI, or update the PR unless the user explicitly asks.
