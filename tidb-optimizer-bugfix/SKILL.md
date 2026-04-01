@@ -123,6 +123,14 @@ curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
    - Record debugging pitfalls and verified behavior in `~/devel/opensource/tidb-note`.
    - Prefer appending an existing note file over creating a new top-level note file.
 
+## TiDB CI follow-through
+
+- Treat TiDB CI as noisy; prioritize unique signal over raw failure count.
+- If the diff does not touch parser-related files, parser test failures are usually ignorable flaky noise unless the failure is clearly on the changed code path.
+- `fast_test_tiprow`, `idc-jenkins-ci-tidb/unit-test`, and `pull-build-next-gen` are equivalent unit-test surfaces. If one of them is flaky or infra-broken, do not wait for the other two before reacting.
+- When one of those equivalent jobs is the blocker, reply `/retest` directly instead of spending more time re-triaging duplicate failures.
+- Do not idle on one task while waiting for CI or `/retest`. Move to another ready issue, PR review, or bounded investigation, then return when CI produces fresh evidence.
+
 ## Test strategy checklist
 
 - Start from existing optimizer/planner tests; append cases first.
