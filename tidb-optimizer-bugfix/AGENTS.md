@@ -1,17 +1,23 @@
-# TiDB Optimizer Bugfix Issue Notes
+# TiDB Optimizer Bugfix Notes
 
-This skill directory intentionally keeps only the issue-related assets:
+Use this skill directory for two related knowledge sources:
 
-- the issue-corpus workflow in `SKILL.md`
-- the checked-in issue corpus under `references/tidb-customer-planner-issues/`
-- the GitHub mining script in `scripts/`
+- the bugfix workflow and guardrails in `SKILL.md`
+- the issue-derived field precedent corpus under `references/tidb-customer-planner-issues/`
+
+The issue corpus is supplemental. Its main value is:
+
+- avoiding duplicate work on issues that already have landed fixes
+- locating linked PRs, merge times, and affected modules quickly
+- spotting historical fixes that may be incomplete, wrong, or regressed nearby
 
 ## Default workflow
 
-1. Search the checked-in corpus first.
-2. Read the matching issue files and extract symptoms, linked PRs, merge times, and affected modules.
-3. Mine GitHub issues with the script only if the local corpus misses the pattern.
-4. Keep the generated files as raw field precedents; do not overfit them into generic rules.
+1. Follow `SKILL.md` as the primary bugfix procedure.
+2. Search the checked-in issue corpus before writing code when fix lineage matters.
+3. Read the matching issue files and extract symptoms, linked PRs, merge times, and affected modules.
+4. Mine GitHub issues with the script only if the local corpus misses the pattern.
+5. Keep generated files as raw field precedents; do not overfit them into generic rules.
 
 ## Issue mining script
 
@@ -66,7 +72,7 @@ Keep and reuse:
 - affected modules
 - open issues that should remain on the reminder list
 
-Generated files are raw field precedents. Keep them separate from hand-written guidance.
+Generated files are raw field precedents. Keep them separate from the primary bugfix guidance in `SKILL.md`.
 
 ## Tooling assumptions
 
