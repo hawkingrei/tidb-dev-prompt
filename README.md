@@ -7,7 +7,7 @@ A small collection of TiDB development skills and references designed to be inst
 **Skills**
 - `context-management` — Context engineering and long-running agent loop hygiene.
 - `tidb-doc-finder` — Doc lookup via `llms.txt`, with MCP-first fetching and local search.
-- `tidb-optimizer-bugfix` — Minimal TiDB optimizer fixes with hypothesis-driven validation.
+- `tidb-optimizer-bugfix` — Minimal TiDB optimizer fixes with hypothesis-driven validation and built-in tuning/oncall references for triage.
 - `tidb-profiler-analyzer` — Analyze TiDB/TiKV/PD/TiFlash CPU or heap profiles from zip archives.
 - `plan-replayer-testing` — Add new TiDB plan replayer test cases from a zip bundle.
 - `pr-review-helper` — Pull PR comments, diffs, and CI status; fetch Actions logs on failure.
