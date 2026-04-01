@@ -1,11 +1,13 @@
 ---
 name: tidb-optimizer-bugfix
-description: "Fix TiDB optimizer bugs with minimal diffs, hypothesis-driven validation, and regression tests aligned with tidb-test-guidelines. Use when reproducing, fixing, and validating planner/optimizer behavior bugs."
+description: "Fix TiDB optimizer bugs with minimal diffs, hypothesis-driven validation, and regression tests. Use the bundled issue precedents only to avoid re-fixing already solved bugs or inspect suspect historical fixes."
 ---
 
 # TiDB Optimizer Bugfix Skill
 
 Fix TiDB optimizer bugs with minimal, reviewable changes and strong regression protection.
+
+The issue corpus under `references/tidb-customer-planner-issues/` is supplemental. Use it to avoid spending time on bugs that were already fixed, and to spot historical fixes that may be incomplete, regressed, or wrong in a nearby shape.
 
 ## When to use
 
@@ -59,22 +61,28 @@ If either is missing, ask once, then proceed with explicit assumptions.
    - Estimate the likely change size (`small`, `medium`, `large`) from expected touched modules, test setup, and schema churn.
    - Prioritize `small` issues first; defer larger ones unless they are already in progress or explicitly assigned.
 
-2. Reproduce and localize
+2. Search the local issue corpus before writing code
+   - Search `references/tidb-customer-planner-issues/` for the symptom, module, error text, SQL feature, or issue number.
+   - Use matched issue files to avoid re-fixing a bug that already has a landed fix.
+   - Inspect linked PRs and affected files to detect historical fixes that may be incomplete, incorrect, or regressed in a nearby shape.
+   - If the local corpus misses the pattern and fix lineage matters, refresh it with `scripts/generate_tidb_issue_experiences.py` as described in `AGENTS.md`.
+
+3. Reproduce and localize
    - Reproduce with the smallest SQL/test case.
    - Locate ownership paths with `rg` and existing tests before writing code.
    - Build 1-3 root-cause hypotheses and rank by likelihood.
 
-3. Prove the hypothesis before fixing
+4. Prove the hypothesis before fixing
    - Confirm the highest-probability hypothesis with targeted inspection and/or a minimal failing test.
    - If evidence rejects it, move to the next hypothesis.
 
-4. Implement the smallest defensible fix
+5. Implement the smallest defensible fix
    - Change only the necessary branch/condition/state transition.
    - Keep intent explicit and avoid broad reordering unless required for correctness.
    - Prefer touching one existing helper/callsite over introducing a new abstraction.
    - Encode non-obvious invariants with `intest.Assert` and brief "why" comments instead of temporary logs.
 
-5. Mandatory self-check loop
+6. Mandatory self-check loop
 
 ```text
 loop {
@@ -94,7 +102,7 @@ loop {
 }
 ```
 
-6. Related-issue sweep for PR-driven fixes
+7. Related-issue sweep for PR-driven fixes
    - If there is an original PR, run:
 
 ```bash
@@ -107,11 +115,11 @@ curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
    - If a related issue is also fixed, add regression coverage or explicit validation for that SQL shape when practical.
    - If a related issue is not covered, call it out as remaining follow-up work instead of silently assuming it is fixed.
 
-7. Validation and closure
+8. Validation and closure
    - Confirm old behavior is rejected and new behavior is accepted.
    - Keep validation scope minimal but sufficient to prove no regression in nearby semantics.
 
-8. Write reusable notes
+9. Write reusable notes
    - Record debugging pitfalls and verified behavior in `~/devel/opensource/tidb-note`.
    - Prefer appending an existing note file over creating a new top-level note file.
 
@@ -135,6 +143,10 @@ Use targeted commands and keep evidence explicit.
 # Locate code and nearby tests
 rg -n "<keyword_or_symbol>" pkg/planner pkg/expression pkg/executor
 
+# Search the local issue corpus before fixing
+rg -n "<symptom_or_keyword>" \
+  .agents/skills/tidb-optimizer-bugfix/references/tidb-customer-planner-issues
+
 # Typical targeted optimizer/planner tests
 go test -run <TestName> -tags=intest,deadlock ./pkg/planner/...
 
@@ -143,6 +155,11 @@ rg -n "failpoint\\.Inject|failpoint\\.Enable" pkg/planner/<subpkg>
 
 # Trigger the PR bot to surface related issues, then inspect the original PR reply
 curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
+
+# Refresh the local issue corpus when needed
+python3 .agents/skills/tidb-optimizer-bugfix/scripts/generate_tidb_issue_experiences.py \
+  --query 'repo:pingcap/tidb is:issue label:"report/customer" label:"sig/planner" created:>=2024-01-01' \
+  --out-dir outputs/tidb-customer-planner-issues
 
 # MUST run bazel prepare after adding new tests (also run it for other repository-required cases)
 make bazel_prepare
