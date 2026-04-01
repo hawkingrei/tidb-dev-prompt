@@ -1,30 +1,17 @@
-# TiDB Optimizer Bugfix Agent Notes
+# TiDB Optimizer Bugfix Issue Notes
 
-Use this skill directory for three different knowledge sources:
+This skill directory intentionally keeps only the issue-related assets:
 
-- the bugfix workflow and guardrails in `SKILL.md`
-- curated topic references under `references/`
-- GitHub issue-derived field experience generated into markdown files
-
-## When to mine issue experience
-
-Use GitHub issue mining when:
-
-- the local references do not cover a customer-facing symptom well enough
-- you need a recent field precedent instead of a general tuning rule
-- you want fix PRs, merge timestamps, and open issue reminders
-- you want to build or refresh a local corpus of customer-driven planner or stats bugs
-
-Do not start from issue mining if `SKILL.md` and a stable reference under `references/` already answer the question. Use the issue corpus to complement the topic docs, not replace them.
+- the issue-corpus workflow in `SKILL.md`
+- the checked-in issue corpus under `references/tidb-customer-planner-issues/`
+- the GitHub mining script in `scripts/`
 
 ## Default workflow
 
-1. Start with `SKILL.md` and the local references in `references/`.
-2. Search `references/optimizer-oncall-experiences-redacted/` for a symptom match.
-3. Search `references/tidb-customer-planner-issues/` if you need linked PRs, merge times, or still-open customer gaps.
-4. If the local corpora are still missing the pattern, mine GitHub issues with the script in `scripts/`.
-5. Review the generated files, then fold reusable learnings back into the relevant reference docs when appropriate.
-6. Keep the final skill bugfix-oriented: if the case is a tuning-only incident, record the workaround instead of inventing a code patch.
+1. Search the checked-in corpus first.
+2. Read the matching issue files and extract symptoms, linked PRs, merge times, and affected modules.
+3. Mine GitHub issues with the script only if the local corpus misses the pattern.
+4. Keep the generated files as raw field precedents; do not overfit them into generic rules.
 
 ## Issue mining script
 
@@ -40,7 +27,7 @@ The script:
 - writes one markdown file per issue
 - writes an index `README.md` into the output directory
 
-The current checked-in issue corpus lives under:
+The checked-in issue corpus lives under:
 
 - `references/tidb-customer-planner-issues/`
 
@@ -52,10 +39,10 @@ For customer-driven planner issues:
 repo:pingcap/tidb is:issue label:"report/customer" label:"sig/planner" created:>=2024-01-01
 ```
 
-For stats-heavy issue mining:
+For a broader planner or execution slice:
 
 ```text
-repo:pingcap/tidb is:issue label:"report/customer" (label:"sig/planner" OR label:"sig/execution") stats created:>=2024-01-01
+repo:pingcap/tidb is:issue label:"report/customer" (label:"sig/planner" OR label:"sig/execution") created:>=2024-01-01
 ```
 
 Adjust the query rather than hardcoding different behaviors into the script.
@@ -79,17 +66,10 @@ Keep and reuse:
 - affected modules
 - open issues that should remain on the reminder list
 
-Do not treat every generated issue as a mature tuning rule. Generated files are raw field precedents. Promote them into `references/` only after the pattern is stable and reusable.
+Generated files are raw field precedents. Keep them separate from hand-written guidance.
 
 ## Tooling assumptions
 
 - `gh` CLI must be installed and authenticated
 - network access to GitHub must be available
 - the output directory should be treated as generated content
-
-## Editing guidance
-
-- Keep curated docs in `references/` concise and topic-oriented.
-- Keep generated issue corpora outside the hand-written topic docs unless they are intentionally promoted.
-- If you regenerate a corpus, prefer writing into a fresh output directory or knowingly replacing the previous generated set.
-- Do not let generated issue files replace the bugfix workflow in `SKILL.md`; they are supporting evidence, not the main procedure.
