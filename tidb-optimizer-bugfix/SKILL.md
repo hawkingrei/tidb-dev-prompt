@@ -31,7 +31,14 @@ Use this skill when the task is any optimizer/planner correctness bug, including
    - Prefer behavior-focused assertions over implementation details.
    - Keep tests quiet and deterministic; prove behavior with assertions instead of logs.
 
-4. Test design MUST follow `tidb-test-guidelines`.
+4. Compare compatibility and optimizer-quality bugs against MySQL before deciding the fix target.
+   - For SQL correctness, error handling, warnings, type coercion, or optimizer compatibility bugs, treat MySQL behavior as the default oracle.
+   - When the issue is optimizer-related, compare both user-visible results and `EXPLAIN` / `EXPLAIN ANALYZE` output when the two systems are comparable enough to make the comparison meaningful.
+   - Use the plan comparison to decide whether the current task is complete or whether TiDB still has a remaining optimizer-quality gap that should be fixed now or called out as follow-up.
+   - Do not treat the issue text, customer expectation, or historical TiDB behavior alone as sufficient proof of the correct result.
+   - If TiDB must intentionally diverge, capture the reason explicitly in the task report and tests.
+
+5. Test design MUST follow `tidb-test-guidelines`.
    - Read and apply `.agents/skills/tidb-test-guidelines/SKILL.md` in the TiDB repo.
    - Prefer appending to existing test suites/files.
    - Reuse existing table schemas, fixtures, and setup whenever they can express the bug.
@@ -39,7 +46,7 @@ Use this skill when the task is any optimizer/planner correctness bug, including
    - Follow placement, naming, fixture reuse, and shard-count guidance from the guideline.
    - When adding new tests, MUST run `make bazel_prepare`.
 
-5. Persist debugging knowledge for future bugfixes.
+6. Persist debugging knowledge for future bugfixes.
    - Summarize issues encountered, observed symptoms, validated root cause, and why the final fix is minimal.
    - Add or append a note under `~/devel/opensource/tidb-note` in the relevant subsystem path.
    - Include the key regression SQL/test shape and validation commands in the note.
@@ -48,6 +55,7 @@ Use this skill when the task is any optimizer/planner correctness bug, including
 
 - A concrete bug case (issue link, failing SQL, or failing test).
 - Target branch and module scope.
+- The expected behavior baseline: MySQL result/error/warning for the reproduction case, plus `EXPLAIN` / `EXPLAIN ANALYZE` output when the issue is optimizer-related, or an explicit reason why MySQL is not the right oracle.
 - Original PR link/number when the task is PR-driven and you need the related-issue bot sweep.
 - When the task is auto-picked from `pingcap/tidb` issues, capture the issue labels, title/body, and the smallest likely reproduction clue before coding.
 
@@ -69,6 +77,7 @@ If either is missing, ask once, then proceed with explicit assumptions.
 
 3. Reproduce and localize
    - Reproduce with the smallest SQL/test case.
+   - For compatibility-shaped or optimizer-quality bugs, run or reason through the same reproduction on MySQL first and record the exact result, error, warning, and when relevant the `EXPLAIN` / `EXPLAIN ANALYZE` output or plan-shape difference.
    - Locate ownership paths with `rg` and existing tests before writing code.
    - Build 1-3 root-cause hypotheses and rank by likelihood.
 
@@ -117,6 +126,8 @@ curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
 
 8. Validation and closure
    - Confirm old behavior is rejected and new behavior is accepted.
+   - For compatibility-shaped bugs, confirm TiDB matches MySQL on the reproduction case and at least one nearby semantic variant, or document the intentional divergence.
+   - For optimizer-related bugs, compare `EXPLAIN` / `EXPLAIN ANALYZE` again after the fix and state whether TiDB now reaches the intended plan quality or still has a bounded follow-up gap.
    - Keep validation scope minimal but sufficient to prove no regression in nearby semantics.
 
 9. Write reusable notes
@@ -137,6 +148,8 @@ curl -X POST https://tiara.hawkingrei.com/issues/trigger-reply/<issue_id>
 - Reuse existing table definitions and fixture data before introducing new schema setup.
 - Include regression case for the exact failing SQL shape.
 - Add one nearby semantic variant to prevent trivial overfitting.
+- When the bug is about SQL compatibility, make the assertions reflect MySQL-observed behavior instead of historical TiDB behavior.
+- When the bug is about optimizer quality, compare the plan with MySQL and add the smallest stable assertions that lock the intended TiDB plan behavior without overfitting runtime-noisy details.
 - If bug affects prepare path, verify both prepare and non-prepare semantics when relevant.
 - Create new tests or tables only when the existing suite cannot express the bug faithfully.
 - Do not add log/print statements to tests; use assertions for observable behavior.
@@ -178,11 +191,13 @@ make bazel_prepare
 When finishing, report:
 
 1. Files changed and why each change is necessary.
-2. Risk check: correctness, compatibility, performance.
-3. Exact verification commands used.
-4. Whether the original PR bot surfaced related issues, and which ones were also fixed or left for follow-up.
-5. Note path added/updated under `~/devel/opensource/tidb-note` (or why note update was skipped).
-6. What was not verified locally.
+2. MySQL comparison: what MySQL does for the reproduction case, and whether the final TiDB behavior now matches it.
+3. Plan comparison: what `EXPLAIN` / `EXPLAIN ANALYZE` shows in MySQL versus TiDB, and whether TiDB still has a remaining optimizer-improvement gap.
+4. Risk check: correctness, compatibility, performance.
+5. Exact verification commands used.
+6. Whether the original PR bot surfaced related issues, and which ones were also fixed or left for follow-up.
+7. Note path added/updated under `~/devel/opensource/tidb-note` (or why note update was skipped).
+8. What was not verified locally.
 
 ## Additional PR / Push Guardrails
 

@@ -11,6 +11,8 @@ The issue corpus is supplemental. Its main value is:
 - locating linked PRs, merge times, and affected modules quickly
 - spotting historical fixes that may be incomplete, wrong, or regressed nearby
 
+For SQL compatibility, correctness, or optimizer-quality bugs, the issue corpus is a clue source, not the behavior oracle. Before deciding the fix target, compare the reproduction case against MySQL for both user-visible results and, when relevant, `EXPLAIN` / `EXPLAIN ANALYZE` plan behavior. Use that comparison to decide whether the task is a pure compatibility fix or whether TiDB still needs an optimizer improvement, unless the task explicitly requires a TiDB-specific divergence.
+
 ## Default workflow
 
 1. Follow `SKILL.md` as the primary bugfix procedure.
